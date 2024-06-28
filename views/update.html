@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update</title>
+</head>
+
+<body>
+    <div class="border border-primary border-2 mx-auto p-2 mt-3 w-50 font-monospace" style="width: fit-content;">
+        <h1 class="text-center">Actualizar</h1>
+        <form action="/update" method="post" id="form">
+            <label for="id">ID:</label><br>
+            <input type="number" name="id" id="id" class="w-100"><br>
+            <label for="name">Name</label><br>
+            <input type="name" name="name" placeholder="Name" id="name" class="w-100"><br>
+            <input type="submit" value="Actualizar" class="btn btn-info my-2 w-100">
+            <a href="/" class="btn btn-outline-dark w-100">Volver</a>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script>
+        const form = document.getElementById("form");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const id = document.querySelector("#id").value;
+            const name = document.querySelector("#name").value;
+            console.log(id);
+
+            try {
+                let respuestaJSON;
+                await fetch('/api/update', {
+                    method: 'PUT',
+                    headers: {
+                        'content-type': 'application/json',
+                    },
+                    body: JSON.stringify({ id: id, name: name }),
+                })
+                    .then(respuesta => {
+                        respuestaJSON = respuesta;
+                        return respuesta.json()
+                    })
+                    .then(resBack => {
+                        if (respuestaJSON.status === 200) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Éxito!',
+                                text: resBack.message
+                            });
+                            return;
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: resBack.message
+                            })
+                            return;
+                        }
+                    })
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Ups! Algo salio mal, vuelve a intentarlo'
+                })
+                return;
+            }
+
+        })
+    </script>
+</body>
+
+</html>
