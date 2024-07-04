@@ -1,4 +1,3 @@
-//Define las rutas para servis las vistas html
 import express from "express";
 import { createItem, deleteItem, getItems, updateItem } from "../controllers/itemController.js";
 
